@@ -74,7 +74,7 @@ class CLIArgument(GenericObject):
 		"nargs": directives.unchanged_required,  # The number of command-line arguments that should be consumed.
 		"choices": directives.unchanged_required,  # A container of the allowable values for the argument.
 		"metavar": directives.unchanged_required,  # A name for the argument in usage messages.
-		}
+	}
 
 	def __init__(
 			self,

@@ -3,12 +3,12 @@ from typing import Tuple
 
 # 3rd party
 import pytest
-from betamax import Betamax  # type: ignore
+from betamax import Betamax  # type: ignore[import-untyped]
 from domdf_python_tools.paths import PathPlus
 
 try:
 	# 3rd party
-	import pytest_docker_tools  # type: ignore
+	import pytest_docker_tools  # type: ignore[import-untyped]  # noqa: F401
 	pytest_plugins: Tuple[str, ...] = ("pytest_docker_tools", "coincidence", "github3_utils.testing")
 except ImportError:
 	pytest_plugins = ("coincidence", "github3_utils.testing")
@@ -18,10 +18,10 @@ with Betamax.configure() as config:
 
 
 @pytest.fixture()
-def fake_token(monkeypatch):
+def fake_token(monkeypatch) -> None:
 	monkeypatch.setenv("GITHUB_TOKEN", "1234")
 
 
 @pytest.fixture()
-def repo_root():
+def repo_root() -> PathPlus:
 	return PathPlus(__file__).parent.parent

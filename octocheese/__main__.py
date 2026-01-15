@@ -41,7 +41,7 @@ __all__ = ["main", "run", "token_var"]
 token_var = "GITHUB_TOKEN"
 
 
-def _version_callback(ctx: Context, param: Option, value: int):
+def _version_callback(ctx: Context, param: Option, value: int) -> None:
 	# this package
 	from octocheese import __version__
 
@@ -81,7 +81,7 @@ def main(
 		no_self_promotion: bool = False,
 		max_tags: int = -1,
 		traceback: bool = False,
-		):
+		) -> None:
 	"""
 	Copy PyPI Packages to GitHub Releases.
 	"""
@@ -119,7 +119,7 @@ def main(
 				repo_name,
 				pypi_name,
 				self_promotion=not no_self_promotion,
-				max_tags=max_tags
+				max_tags=max_tags,
 				)
 	except AuthenticationFailed:
 		raise click.UsageError("Invalid credentials for GitHub REST API.")
@@ -135,9 +135,9 @@ def run(
 		github_username: str,
 		repo_name: str,
 		pypi_name: str,
-		self_promotion=True,
+		self_promotion: bool = True,
 		max_tags: int = -1,
-		):
+		) -> None:
 	"""
 	Helper function for when running as script or action.
 

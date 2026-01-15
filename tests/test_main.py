@@ -1,5 +1,6 @@
 # stdlib
 import tempfile
+from typing import List
 
 # 3rd party
 import pytest
@@ -13,7 +14,12 @@ import octocheese
 from octocheese.__main__ import main
 
 
-def run_test(file_regression: FileRegressionFixture, exit_code: int, *args: str, extension: str = ".txt"):
+def run_test(
+		file_regression: FileRegressionFixture,
+		exit_code: int,
+		*args: str,
+		extension: str = ".txt",
+		) -> None:
 	__tracebackhide__ = False
 
 	with tempfile.TemporaryDirectory() as tmpdir:
@@ -37,7 +43,7 @@ dash_r = pytest.mark.parametrize(
 				["--repo", "https://github.com/github/choosealicense.com.git"],
 				["--repo", "https://github.com/github/choosealicense.com"],
 				["--repo", "github/choosealicense.com"],
-				]
+				],
 		)
 
 
@@ -46,7 +52,7 @@ def test_main_no_args(file_regression: FileRegressionFixture):
 
 
 @pytest.mark.parametrize("args", [["-h"], ["--help"]])
-def test_main_help(args, file_regression: FileRegressionFixture):
+def test_main_help(args: List[str], file_regression: FileRegressionFixture):
 	run_test(file_regression, 0, *args)
 
 
@@ -63,7 +69,12 @@ def test_main_missing_token(file_regression: FileRegressionFixture):
 @pytest.mark.parametrize("pypi_name", ["hello_world"])
 @pytest.mark.parametrize("dash_t", [["-t", "1234"], ["-t1234"], ["--token", "1234"]])
 @dash_r
-def test_main_invalid_credentials(pypi_name, dash_t, dash_r, file_regression: FileRegressionFixture):
+def test_main_invalid_credentials(
+		pypi_name: str,
+		dash_t: str,
+		dash_r: str,
+		file_regression: FileRegressionFixture,
+		):
 	run_test(file_regression, 2, "octocat/hello_world", *dash_t, *dash_r, extension="._t_r.txt")
 	run_test(file_regression, 2, "octocat/hello_world", *dash_r, *dash_t, extension="._r_t.txt")
 
@@ -71,7 +82,11 @@ def test_main_invalid_credentials(pypi_name, dash_t, dash_r, file_regression: Fi
 @pytest.mark.usefixtures("fake_token")
 @pytest.mark.parametrize("pypi_name", ["hello_world"])
 @dash_r
-def test_main_invalid_credentials_env(pypi_name: str, dash_r, file_regression: FileRegressionFixture):
+def test_main_invalid_credentials_env(
+		pypi_name: str,
+		dash_r: str,
+		file_regression: FileRegressionFixture,
+		):
 	run_test(file_regression, 2, "octocat/hello_world", *dash_r)
 
 

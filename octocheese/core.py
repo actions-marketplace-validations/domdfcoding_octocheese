@@ -28,7 +28,7 @@ import datetime
 import functools
 from contextlib import suppress
 from functools import partial
-from typing import Iterable, Optional, Union
+from typing import TYPE_CHECKING, Iterable, Optional, Union
 
 # 3rd party
 import click
@@ -167,7 +167,7 @@ def update_github_release(
 				release.upload_asset(
 						content_type="application/binary",
 						name=filename,
-						asset=(PathPlus(tmpdir) / filename).read_bytes()
+						asset=(PathPlus(tmpdir) / filename).read_bytes(),
 						)
 
 			except OSError as e:
@@ -190,7 +190,7 @@ def copy_pypi_2_github(
 		self_promotion=True,
 		max_tags: int = -1,
 		traceback: bool = False,
-		):
+		) -> None:
 	"""
 	The main function for ``OctoCheese``.
 
@@ -243,7 +243,7 @@ def copy_pypi_2_github(
 				changelog=changelog,
 				self_promotion=self_promotion,
 				file_urls=pypi_releases[version],
-				traceback=traceback
+				traceback=traceback,
 				)
 
 
@@ -252,7 +252,7 @@ def make_release_message(
 		version: Union[str, float],
 		release_date: datetime.date,
 		changelog: str = '',
-		self_promotion=True,
+		self_promotion: bool = True,
 		) -> str:
 	"""
 	Create a release message.
@@ -310,15 +310,17 @@ _FooterType = Literal["marketplace", "app"]
 
 class UTCDateTime(datetime.datetime):  # pragma: no cover
 
-	@functools.wraps(datetime.datetime.__new__)
-	def __new__(cls, *args, **kwargs):
-		d = datetime.datetime(*args, **kwargs)
-		return d.astimezone(datetime.timezone.utc)
+	if not TYPE_CHECKING:
 
-	@classmethod
-	def strptime(cls, date_string, format):  # noqa: A002  # pylint: disable=redefined-builtin
-		return datetime.datetime.strptime(date_string, format).astimezone(datetime.timezone.utc)
+		@functools.wraps(datetime.datetime.__new__)
+		def __new__(cls, *args, **kwargs):
+			d = datetime.datetime(*args, **kwargs)
+			return d.astimezone(datetime.timezone.utc)
 
-	@classmethod
-	def utcnow(cls):
-		return datetime.datetime.now().astimezone(datetime.timezone.utc)
+		@classmethod
+		def strptime(cls, date_string: str, format: str) -> datetime.datetime:  # noqa: A002  # pylint: disable=redefined-builtin
+			return datetime.datetime.strptime(date_string, format).astimezone(datetime.timezone.utc)
+
+		@classmethod
+		def utcnow(cls) -> datetime.datetime:
+			return datetime.datetime.now().astimezone(datetime.timezone.utc)

@@ -11,7 +11,7 @@ import pytest
 				"octocheese.action",
 				"octocheese.colours",
 				"octocheese.core",
-				]
+				],
 		)
-def test_importability(module_or_package):
+def test_importability(module_or_package: str):
 	assert __import__(module_or_package)
