@@ -8,7 +8,7 @@ from domdf_python_tools.paths import PathPlus
 
 try:
 	# 3rd party
-	import pytest_docker_tools  # type: ignore[import-untyped]  # noqa: F401
+	import pytest_docker_tools  # type: ignore[import-untyped,import-not-found,unused-ignore]  # noqa: F401
 	pytest_plugins: Tuple[str, ...] = ("pytest_docker_tools", "coincidence", "github3_utils.testing")
 except ImportError:
 	pytest_plugins = ("coincidence", "github3_utils.testing")

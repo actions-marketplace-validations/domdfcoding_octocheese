@@ -4,8 +4,8 @@ from typing import List
 
 # 3rd party
 import pytest
-from consolekit.testing import CliRunner, Result
 from coincidence.regressions import check_file_regression
+from consolekit.testing import CliRunner, Result
 from domdf_python_tools.paths import in_directory
 from pytest_regressions.file_regression import FileRegressionFixture
 
